@@ -1,7 +1,6 @@
+// NSImage+Alcatraz.m
 //
-// ATZStyleKit.h
-//
-// Copyright (c) 2014 Marin Usalj | supermar.in
+// Copyright (c) 2016 Roman Gardukevich
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,18 +20,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-#import <Cocoa/Cocoa.h>
 
-@class ATZFillableButton;
-@class ATZPackage;
+#import "NSImage+Alcatraz.h"
 
-@interface ATZStyleKit : NSObject
-
-// Fillable buttons style helper
-+ (void)updateButton:(ATZFillableButton *)fillableButton forPackageState:(ATZPackage *)package animated:(BOOL)animated;
-
-// Drawing Methods
-+ (void)drawFillableButtonWithText:(NSString*)text fillColor:(NSColor *)fillColor backgroundColor:(NSColor *)backgroundColor fillRatio:(float)fillRatio size:(CGSize)size;
-
+@implementation NSImage (Alcatraz)
+-(NSInteger)frameCount {
+    // Based on NSImage+GIF.m from https://gist.github.com/keefo/5344890
+    
+    for (NSImageRep *representation in self.representations) {
+        if ([representation isKindOfClass:[NSBitmapImageRep class]]) {
+            NSBitmapImageRep *bitmapRep = (NSBitmapImageRep *)representation;
+            NSInteger numFrame = [[bitmapRep valueForProperty:NSImageFrameCount] integerValue];
+            return numFrame;
+        }
+    }
+    return 1;
+}
 @end
